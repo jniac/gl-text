@@ -1,0 +1,13 @@
+@import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=block);
+@import url(https://jniac.github.io/some-utils/css/main.css);
+@import url(https://jniac.github.io/some-utils/css/layout.css);
+
+body {
+  font-family: 'Fira Code', monospace;
+  height: 100vh;
+  padding: 64px;
+}
+
+canvas {
+  width: 100%;
+}

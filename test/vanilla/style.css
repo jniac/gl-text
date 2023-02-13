@@ -1,0 +1,10 @@
+@import url(https://jniac.github.io/some-utils/css/main.css);
+@import url(https://jniac.github.io/some-utils/css/layout.css);
+
+img.GlText-Atlas {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 50%;
+  background-color: red;
+}
