@@ -8,6 +8,46 @@ body {
   padding: 64px;
 }
 
+main {
+  align-self: stretch;
+}
+
+.canvas-wrapper {
+  overflow: hidden;
+  aspect-ratio: 4096 / 256;
+  align-self: stretch;
+}
+
+.canvas-wrapper > div {
+  width: 100%;
+  height: 100%;
+  transition: transform .1s ease-out;
+}
+
+.canvas-wrapper > div > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 canvas {
   width: 100%;
+}
+
+pre {
+  transition: opacity .3s ease-in-out;
+}
+
+.copy-button {
+  flex: 0 0 16px;
+  cursor: pointer;
+  background: center no-repeat contain;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="1em" height="1em" viewBox="0 0 24 24"%3E%3Cg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"%3E%3Crect width="8" height="4" x="8" y="2" rx="1" ry="1"%2F%3E%3Cpath d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M16 4h2a2 2 0 0 1 2 2v4m1 4H11"%2F%3E%3Cpath d="m15 10l-4 4l4 4"%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+}
+
+.hidden {
+  opacity: 0;
+  transition-duration: 0s;
 }

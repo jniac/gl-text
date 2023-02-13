@@ -7,11 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="flex column center">
-  <main class="flex column center">
+  <main class="flex column center gutter-4">
     <h1>Atlas Generator</h1>
-    <canvas width="4096" height="256"></canvas>
-    <pre id="chars"></pre>
-    <pre id="data"></pre>
+    <div class="canvas-wrapper">
+      <div>
+        <canvas width="4096" height="256"></canvas>
+        <svg></svg>
+      </div>
+    </div>
+    <div class="flex row gutter-16">
+      <pre id="chars"></pre>
+      <div class="copy-button"></div>
+    </div>
+    <div class="flex row gutter-16">
+      <pre id="data"></pre>
+      <div class="copy-button"></div>
+    </div>
   </main>
   <script src="main.js" type="module"></script>
 </body>
