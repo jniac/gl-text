@@ -16,6 +16,7 @@ main {
   overflow: hidden;
   aspect-ratio: 4096 / 256;
   align-self: stretch;
+  cursor: none;
 }
 
 .canvas-wrapper > div {

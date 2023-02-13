@@ -15,6 +15,7 @@ const getShaderWrapper = (key: 'vertexShader' | 'fragmentShader') => {
     },
     beforeMain: (code: string) => {
       _shader![key] = _shader![key].replace('void main() {', `${wrapCode(code)}\nvoid main() {`)
+      return ShaderForge
     },
     replace: (pattern: string, code: string) => {
       _shader![key] = _shader![key].replace(pattern, wrapCode(code))

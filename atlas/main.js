@@ -42,7 +42,10 @@ svg.setAttributeNS(null, 'viewBox', `0 0 ${atlasProps.width} ${atlasProps.height
   for (const [index, char] of [...chars].entries()) {
     const x = index % gridWidth
     const y = (index - x) / gridWidth
-    ctx.fillText(char, x * charWidth, (y  + (1 - fontScale) / 2) * charHeight)
+
+    const cx = (x + (1 - fontScale) * .4 - .005) * charWidth
+    const cy = (y + (1 - fontScale) * .4 + .08) * charHeight
+    ctx.fillText(char, cx, cy)
 
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
     rect.setAttributeNS(null, 'fill', 'none')
@@ -57,7 +60,7 @@ svg.setAttributeNS(null, 'viewBox', `0 0 ${atlasProps.width} ${atlasProps.height
 
 document.querySelector('pre#chars').innerHTML = atlasProps.chars
 
-const data = canvas.toDataURL()
+const data = `export const atlasData = '${canvas.toDataURL()}'`
 document.querySelector('pre#data').innerHTML = `${data.slice(0, 100)}...`
 
 export const getData = (id) => {
