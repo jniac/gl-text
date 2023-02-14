@@ -27,7 +27,7 @@ const plainSphere = new Mesh(geometry, new MeshPhysicalMaterial({
 scene.add(plainSphere)
 
 const glText = new GlText({
-  maxCount: positionAttr.count,
+  count: positionAttr.count,
   col: 24,
   row: 2,
   cameraZOffset: .5,

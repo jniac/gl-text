@@ -6,7 +6,7 @@ const sphere = createSphere()
 const positionAttr = sphere.geometry.getAttribute('position')
 
 const glText = new GlText({
-  maxCount: positionAttr.count,
+  count: positionAttr.count,
   col: 24,
   row: 2,
   cameraZOffset: .5,

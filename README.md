@@ -30,6 +30,9 @@ The atlas is made via `canvas.toDataURL()` from that page:
   - By default the text instances are facing the camera
   - But it can be prevented: `new GlText({ billboard: false })`
 
+- Three classic material support. Works well with MeshBasicMaterial & MeshPhysicalMaterial
+  - eg: `const glText = new GlText({ material: new MeshPhysicalMaterial() })`
+
 - Z fighting
   - By default a tiny "polygon offset" is enabled, and can be adjusted: 
     - `new GlText({ polygonOffsetFactor: -10, polygonOffsetUnits: -10 })`
@@ -45,7 +48,7 @@ The atlas is made via `canvas.toDataURL()` from that page:
 
 ```ts
 const glText = new GlText({
-  maxCount: 100_000, // default is 2000
+  count: 100_000, // default is 2000
   col = 16, // default is 12
   row = 3, // default is 2
   billboard = false, // default is true

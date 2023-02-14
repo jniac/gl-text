@@ -18,7 +18,7 @@ const count3 = positionAttr3.count
 const count = count1 + count2 + count3
 
 const glText = new GlText({
-  maxCount: count,
+  count: count,
   col: 24,
   row: 2,
 })

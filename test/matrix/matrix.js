@@ -1,38 +1,43 @@
-import { Color, TorusKnotGeometry, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, AmbientLight, DirectionalLight, Vector3, Matrix4, FogExp2 } from 'three'
+import { Color, TorusKnotGeometry, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, AmbientLight, DirectionalLight, Vector3, Matrix4, FogExp2, Group } from 'three'
 import { GlText } from '@jniac/gl-text'
 import { onFrame, scene } from '../shared/stage.js'
 
 scene.background = new Color('#cff')
 scene.fog = new FogExp2(scene.background.getHex(), 0.1)
 
+const ambient = new AmbientLight('#ccf', .5)
+scene.add(ambient)
+
+const sun = new DirectionalLight('#ffc')
+sun.position.set(5, 20, 10)
+scene.add(sun)
+
 
 const geometry = new TorusKnotGeometry(4, 1.6, 128, 32)
 const positionAttr = geometry.getAttribute('position')
 const normalAttr = geometry.getAttribute('normal')
 
-scene.add(new AmbientLight('#ccf', .5))
-
-const sun = new DirectionalLight('#ffc')
-sun.position.set(5, 20, 10)
-scene.add(sun)
+const group = new Group()
+scene.add(group)
 
 const wireMesh = new Mesh(geometry, new MeshBasicMaterial({
   color: '#88f',
   wireframe: true,
 }))
 wireMesh.rotation.set(.3, .7, 0)
-scene.add(wireMesh)
+group.add(wireMesh)
 
 onFrame(() => {
-  wireMesh.rotateY(.001)
+  group.rotateY(.001)
 })
 
 const glText = new GlText({
-  maxCount: positionAttr.count,
+  count: positionAttr.count,
   col: 24,
   row: 2,
   cameraZOffset: .5,
   billboard: false,
+  material: new MeshPhysicalMaterial(),
 })
 wireMesh.add(glText)
 

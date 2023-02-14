@@ -1,13 +1,43 @@
-import { Color, ColorRepresentation, Group, InstancedBufferAttribute, InstancedMesh, Matrix4, Vector3 } from 'three'
+import { Color, ColorRepresentation, Group, InstancedBufferAttribute, InstancedMesh, Material, Matrix4, Vector3 } from 'three'
 import { atlasData } from './atlas/data'
 import { atlasProps } from './atlas/props'
 import { MAX_CHARS_PER_LINE, MAX_LINES } from './constants'
-import { material, uniforms } from './material'
+import { defaultMaterial, transformMaterial, uniforms } from './material'
 import { combineInt6, combineInt8, createCharGeometry, solvePositionDeclaration, textToCharIndices } from './utils'
 
 const _color = new Color()
 const _matrix = new Matrix4()
 const _vector = new Vector3()
+
+/**
+ * @public
+ */
+export const defaultConstructorParams = {
+  /**
+   * The number of text that the object could display. Defaults to 2000.
+   */
+  count: 2000,
+  col: 12,
+  row: 2,
+  billboard: true,
+  charPerUnit: 8,
+  defaultSize: 1,
+  polygonOffsetFactor: -1,
+  polygonOffsetUnits: -10,
+  cameraZOffset: 0,
+  /**
+   * By default GlText use an internal modified material derived from MeshBasicMaterial.
+   * But here, it can be redefined by other choice, as MeshPhysicalMaterial, for
+   * clearcoat and sheen effect!
+   * 
+   * NOTE: The provided material will be transformed before compilation (onBeforeCompile 
+   * hook), and should not... already be compiled!
+   */
+  material: <Material> null!,
+}
+
+/** @public */
+export type ConstructorParams = Partial<typeof defaultConstructorParams>
 
 /**
  * @public
@@ -46,9 +76,7 @@ export const defaultTextParams = {
   size: 1,
 }
 
-/**
- * @public
- */
+/** @public */
 export type TextParams = Partial<typeof defaultTextParams>
 
 /**
@@ -87,21 +115,27 @@ export class GlText extends Group {
   backgroundArray: Float32Array
   backgroundAttribute: InstancedBufferAttribute
 
-  constructor({
-    maxCount = 2000,
-    col = 12,
-    row = 2,
-    billboard = true,
-    charPerUnit = 8,
-    defaultSize = 1,
-    polygonOffsetFactor = -1,
-    polygonOffsetUnits = -10,
-    cameraZOffset = 0,
-  } = {}) {
+  constructor(contructorParams: ConstructorParams = {}) {
     super()
 
-    col = Math.min(col, MAX_CHARS_PER_LINE)
-    row = Math.min(row, MAX_LINES)
+    const {
+      count,
+      col: userCol,
+      row: userRow,
+      billboard,
+      charPerUnit,
+      defaultSize,
+      polygonOffsetFactor,
+      polygonOffsetUnits,
+      cameraZOffset,
+      material,
+    } = {
+      ...defaultConstructorParams,
+      ...contructorParams,
+    }
+
+    const col = Math.min(userCol, MAX_CHARS_PER_LINE)
+    const row = Math.min(userRow, MAX_LINES)
 
     this.props = {
       col,
@@ -114,10 +148,12 @@ export class GlText extends Group {
       cameraZOffset,      
     }
 
-    const geometry = createCharGeometry(col * row)
-    const mesh = new InstancedMesh(geometry, material, maxCount)
-    this.add(mesh)
+    const finalMaterial = material ? transformMaterial(material) : defaultMaterial
     
+    const geometry = createCharGeometry(col * row)
+    const mesh = new InstancedMesh(geometry, finalMaterial, count)
+    this.add(mesh)
+
     // uniforms update:
     mesh.onBeforeRender = (renderer, scene, camera) => {
       const {
@@ -134,23 +170,23 @@ export class GlText extends Group {
       uniforms.uCharPerUnit.value = charPerUnit
       uniforms.uCameraZOffset.value = cameraZOffset
       uniforms.uColRow.value.set(col, row)
-      material.polygonOffsetFactor = polygonOffsetFactor
-      material.polygonOffsetUnits = polygonOffsetUnits
+      finalMaterial.polygonOffsetFactor = polygonOffsetFactor
+      finalMaterial.polygonOffsetUnits = polygonOffsetUnits
     }
 
-    const charsArray = new Float32Array(maxCount * 16)
+    const charsArray = new Float32Array(count * 16)
     const charsAttribute = new InstancedBufferAttribute(charsArray, 16)
     geometry.setAttribute('chars', charsAttribute)
 
-    const linesArray = new Float32Array(maxCount * 3)
+    const linesArray = new Float32Array(count * 3)
     const linesAttribute = new InstancedBufferAttribute(linesArray, 3)
     geometry.setAttribute('lines', linesAttribute)
 
-    const colorArray = new Float32Array(maxCount * 4)
+    const colorArray = new Float32Array(count * 4)
     const colorAttribute = new InstancedBufferAttribute(colorArray, 4)
     geometry.setAttribute('textColor', colorAttribute)
 
-    const backgroundArray = new Float32Array(maxCount * 4)
+    const backgroundArray = new Float32Array(count * 4)
     const backgroundAttribute = new InstancedBufferAttribute(backgroundArray, 4)
     geometry.setAttribute('backgroundColor', backgroundAttribute)
 

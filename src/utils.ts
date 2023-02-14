@@ -112,5 +112,7 @@ export const createCharGeometry = (count: number): BufferGeometry => {
     vector.set(0, 1, i).toArray(vertices, stride + 15)
   }
   geometry.setAttribute('position', new BufferAttribute(vertices, 3))
+  geometry.computeVertexNormals()
+  geometry.computeBoundingBox()
   return geometry
 }
