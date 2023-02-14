@@ -22,9 +22,6 @@ export const transformMaterial = <T extends Material>(material: T): T => {
   Object.assign(material, {
     transparent: true,
     map: atlasTexture,
-    side: DoubleSide,
-    polygonOffset: true,
-    polygonOffsetFactor: -10,
   })
 
   material.onBeforeCompile = shader => {
@@ -167,5 +164,9 @@ export const transformMaterial = <T extends Material>(material: T): T => {
   return material
 }
 
-export const defaultMaterial = transformMaterial(new MeshBasicMaterial())
+export const defaultMaterial = transformMaterial(new MeshBasicMaterial({
+  side: DoubleSide,
+  polygonOffset: true,
+  polygonOffsetFactor: -10,
+}))
 

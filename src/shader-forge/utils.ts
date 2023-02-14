@@ -1,9 +1,10 @@
 import { IUniform } from 'three'
+import { GlType } from './GlType'
 
 /** Simple wrapper of code with marks that make easier to debug shader program. */
 export const wrapCode = (code: string) => `\n// ShaderForge ->\n${code}\n// ShaderForge <-\n`
 
-const getGlType = (value: any) => {
+const getGlType = (value: any): GlType => {
   if (typeof value === 'number') {
     return 'float'
   }

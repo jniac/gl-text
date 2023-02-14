@@ -44,6 +44,9 @@ The atlas is made via `canvas.toDataURL()` from that page:
     mimaps works without any troubles (it was not the case with previous technic
     using a single plane for multiple chars).
 
+- ShaderForge
+  - A small tool for glsl shader code manipulation.
+
 ## Usage
 
 ```ts
