@@ -1,11 +1,9 @@
 import { Color, IcosahedronGeometry, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 import { GlText } from '@jniac/gl-text'
 import { scene } from '../shared/stage.js'
-import { createSphere } from '../shared/utils.js'
+import './sphere.js'
 
 scene.background = new Color('#eee')
-
-createSphere()
 
 const setPoint = (x = 0, y = 0, z = 0) => {
   const point = new Mesh(new IcosahedronGeometry(.1, 4), new MeshBasicMaterial({ color: 'white' }))
@@ -36,13 +34,13 @@ glText.setTextAt(1, `abcdefgh\n1234`, {
   position: [0, 2, 0],
   color: 'yellow',
   background: 'blue',
+  backgroundOpacity: .7,
 })
 
 setPoint(0, -2, 0)
 glText.setTextAt(2, `Wie\ngeht's?`, {
   position: [0, -2, 0],
-  color: 'yellow',
-  background: 'blue',
+  color: 'blue',
 })
 
 // setPoint(0, -4, 0)

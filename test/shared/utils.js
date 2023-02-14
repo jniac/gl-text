@@ -1,4 +1,5 @@
 import { Mesh, MeshBasicMaterial, SphereGeometry, TorusKnotGeometry } from 'three'
+import { scene } from './stage.js'
 
 export const createSphere = (radius = 50, widthSegments = 64, heightSegments = 32) => {
   const geometry = new SphereGeometry(radius, widthSegments, heightSegments)
