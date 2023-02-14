@@ -3,6 +3,7 @@ import { atlasData } from './atlas/data'
 import { atlasProps } from './atlas/props'
 import { MAX_CHARS_PER_LINE, MAX_LINES } from './constants'
 import { defaultMaterial, transformMaterial, uniforms } from './material'
+import { ShaderForge } from './shader-forge'
 import { combineInt6, combineInt8, createCharGeometry, solvePositionDeclaration, textToCharIndices } from './utils'
 
 const _color = new Color()
@@ -92,6 +93,10 @@ export class GlText extends Group {
 
   static getAtlasChars(): string {
     return atlasProps.chars 
+  }
+
+  static get ShaderForge() {
+    return ShaderForge
   }
 
   props: {
