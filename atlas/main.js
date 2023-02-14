@@ -55,6 +55,12 @@ svg.setAttributeNS(null, 'viewBox', `0 0 ${atlasProps.width} ${atlasProps.height
     rect.setAttributeNS(null, 'width', charWidth)
     rect.setAttributeNS(null, 'height', charHeight)
     svg.append(rect)
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+    text.setAttributeNS(null, 'x', (x + .1) * charWidth)
+    text.setAttributeNS(null, 'y', (y + .95) * charHeight)
+    text.innerHTML = index.toString()
+    svg.append(text)
   }
 }
 
