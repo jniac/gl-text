@@ -1,5 +1,5 @@
 export const atlasProps = {
-  chars: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz #@&$%?!éèàìñ"'+-_=*/\|[](){}<>.;:,×`,
+  chars: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz #@&$%?!éèàìñ"'+-_=*/\\|[](){}<>.;:,×`,
   width: 4096,
   height: 256,
   gridWidth: 64,

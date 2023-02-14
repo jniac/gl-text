@@ -64,6 +64,8 @@ svg.setAttributeNS(null, 'viewBox', `0 0 ${atlasProps.width} ${atlasProps.height
   }
 }
 
+const safeChars = () => atlasProps.chars.replace('\\', '\\\\')
+
 document.querySelector('pre#chars').innerHTML = atlasProps.chars
 
 const data = `export const atlasData = '${canvas.toDataURL()}'`
@@ -72,7 +74,7 @@ document.querySelector('pre#data').innerHTML = `${data.slice(0, 100)}...`
 export const getData = (id) => {
   switch (id) {
     case 'chars': {
-      return atlasProps.chars
+      return safeChars()
     }
     case 'data': {
       return data

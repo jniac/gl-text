@@ -12,11 +12,11 @@ const camera = new PerspectiveCamera(
 const renderer = new WebGLRenderer({
   antialias: true,
 })
-renderer.pixelRatio = window.devicePixelRatio
+renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
-camera.position.z = 5
+camera.position.z = 8
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
@@ -45,3 +45,11 @@ export {
   controls,
   onFrame,
 }
+
+Object.assign(window, {
+  renderer,
+  camera,
+  scene,
+  controls,
+  onFrame,
+})

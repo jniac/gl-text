@@ -1,14 +1,13 @@
-import { Color, ColorRepresentation, Group, InstancedBufferAttribute, InstancedMesh, Matrix4, PlaneGeometry, Vector3 } from 'three'
+import { Color, ColorRepresentation, Group, InstancedBufferAttribute, InstancedMesh, Matrix4, Vector3 } from 'three'
 import { atlasData } from './atlas/data'
 import { atlasProps } from './atlas/props'
+import { MAX_CHARS_PER_LINE, MAX_LINES } from './constants'
 import { material, uniforms } from './material'
-import { solvePositionDeclaration, textToCharIndices } from './utils'
-
-// 3 and not 4, because the maximum integer a float 32 (ieee754) can define is 2^24 (https://stackoverflow.com/a/3793950/4696005)
-const INT8_PER_FLOAT32 = 3
+import { charIndicesToLineCount, charIndicesToLineLengths, combineInt6, combineInt8, createCharGeometry, solvePositionDeclaration, textToCharIndices } from './utils'
 
 const _color = new Color()
 const _matrix = new Matrix4()
+const _vector = new Vector3()
 
 /**
  * @public
@@ -47,12 +46,13 @@ export class GlText extends Group {
   props: {
     col: number
     row: number
-    itemSize: number
   }
 
   mesh: InstancedMesh
   charsArray: Float32Array
   charsAttribute: InstancedBufferAttribute
+  linesArray: Float32Array
+  linesAttribute: InstancedBufferAttribute
   colorArray: Float32Array
   colorAttribute: InstancedBufferAttribute
   backgroundArray: Float32Array
@@ -66,17 +66,25 @@ export class GlText extends Group {
   } = {}) {
     super()
 
-    const geometry = new PlaneGeometry()
+    col = Math.min(col, MAX_CHARS_PER_LINE)
+    row = Math.min(row, MAX_LINES)
+
+    const geometry = createCharGeometry(col * row)
     const mesh = new InstancedMesh(geometry, material, maxCount)
     this.add(mesh)
-    mesh.onBeforeRender = () => {
+    mesh.onBeforeRender = (renderer, scene, camera) => {
+      uniforms.uCameraMatrix.value.copy(camera.matrixWorld)
+      uniforms.uColRow.value.set(col, row)
       uniforms.uTextSize.value.set(col, row, col / charPerUnit, row / charPerUnit / atlasProps.charAspect)
     }
 
-    const itemSize = Math.ceil(col * row / INT8_PER_FLOAT32)
     const charsArray = new Float32Array(maxCount * 16)
     const charsAttribute = new InstancedBufferAttribute(charsArray, 16)
     geometry.setAttribute('chars', charsAttribute)
+
+    const linesArray = new Float32Array(maxCount * 3)
+    const linesAttribute = new InstancedBufferAttribute(linesArray, 3)
+    geometry.setAttribute('lines', linesAttribute)
 
     const colorArray = new Float32Array(maxCount * 4)
     const colorAttribute = new InstancedBufferAttribute(colorArray, 4)
@@ -86,10 +94,12 @@ export class GlText extends Group {
     const backgroundAttribute = new InstancedBufferAttribute(backgroundArray, 4)
     geometry.setAttribute('backgroundColor', backgroundAttribute)
 
-    this.props = { col, row, itemSize }
+    this.props = { col, row }
     this.mesh = mesh
     this.charsArray = charsArray
     this.charsAttribute = charsAttribute
+    this.linesArray = linesArray
+    this.linesAttribute = linesAttribute
     this.colorArray = colorArray
     this.colorAttribute = colorAttribute
     this.backgroundArray = backgroundArray
@@ -103,13 +113,16 @@ export class GlText extends Group {
       colorOpacity = defaultTextParams.colorOpacity,
       background,
       backgroundOpacity = option.background ? 1 : 0,
+      size = defaultTextParams.size,
     } = option
 
     this.mesh.getMatrixAt(index, _matrix)
     _matrix.setPosition(solvePositionDeclaration(position))
+    _matrix.scale(_vector.setScalar(size))
     this.mesh.setMatrixAt(index, _matrix)
 
     {
+      // Update the "textColor" attribute.
       _color.set(color)
       const stride = index * 4
       const array = this.colorArray
@@ -121,6 +134,7 @@ export class GlText extends Group {
     }
     
     {
+      // Update the "backgroundColor" attribute.
       _color.set(background ?? color)
       const stride = index * 4
       const array = this.backgroundArray
@@ -131,30 +145,29 @@ export class GlText extends Group {
       this.backgroundAttribute.needsUpdate = true
     }
 
-    const { col, row } = this.props
-    const charIndices = textToCharIndices(text, col, row)
     {
+      // Update the "chars" & "lines" attributes.
+      const { col, row } = this.props
+      const { charsArray, linesArray } = this
+      const { lineCount, lineLengths, charIndices } = textToCharIndices(text, col, row)
       const stride1 = index * 16
-      const array = this.charsArray
       for (let i = 0; i < 16; i++) {
         const stride2 = i * 3
-        const a = charIndices[stride2 + 0]
-        const b = charIndices[stride2 + 1]
-        const c = charIndices[stride2 + 2]
-        const abc = (a << 16) + (b << 8) + c
-        array[stride1 + i] = abc
+        const a = charIndices[stride2 + 0] ?? 0
+        const b = charIndices[stride2 + 1] ?? 0
+        const c = charIndices[stride2 + 2] ?? 0
+        charsArray[stride1 + i] = combineInt8(a, b, c)
       }
       this.charsAttribute.needsUpdate = true
-      // DEBUG:
-      // const check = [...array.slice(stride, stride + 16)].map(i => {
-      //   const a = i >> 16
-      //   const b = (i >> 8) & 0xff
-      //   const c = i & 0xff
-      //   return [atlasProps.chars[a], atlasProps.chars[b], atlasProps.chars[c]].join('')
-      // }).join('')
-      // console.log(text, check)
-    }
 
+      const x = combineInt6(lineLengths[0] ?? 0, lineLengths[1] ?? 0, lineLengths[2] ?? 0, lineLengths[3] ?? 0)
+      const y = combineInt6(lineLengths[4] ?? 0, lineLengths[5] ?? 0, lineLengths[6] ?? 0, lineLengths[7] ?? 0)
+      linesArray[index * 3 + 0] = x
+      linesArray[index * 3 + 1] = y
+      linesArray[index * 3 + 2] = lineCount
+      this.linesAttribute.needsUpdate = true
+    }
+    
     return this
   }
 }
