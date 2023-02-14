@@ -21,7 +21,7 @@ const atlasProps = {
   charAspect: 64 / 120,
 }
 
-const fontScale = 0.7
+const fontScale = 0.8
 
 const svg = document.querySelector('svg')
 const canvas = document.querySelector('canvas')

@@ -59,61 +59,6 @@ export const textToCharIndices = (text: string, maxCol: number, maxRow: number):
   return { lineCount, lineLengths, charIndices }
 }
 
-/**
- * Returns `[3, 4]` from 
- * ```
- * [
- *   [1, 2, 3, x, x, x],
- *   [9, 8, 7, 6, x, x],
- * ]
- * ```
- * where `x` is the index of space " "
- */
-export const charIndicesToLineLengths = (charIndices: number[], col: number): number[] => {
-  const whiteSpace = atlasProps.chars.indexOf(' ')
-  const row = charIndices.length / col
-  const lineLengths = new Array(row) as number[]
-  for (let i = 0; i < row; i++) {
-    let k = col
-    while (k > 0) {
-      const index = i * col + k - 1
-      if (charIndices[index] !== whiteSpace) {
-        break
-      }
-      k--
-    }
-    lineLengths[i] = k
-  }
-  return lineLengths
-}
-
-/**
- * Returns `1` from 
- * ```
- * [
- *   [1, 2, 3, x, x, x],
- *   [x, x, x, x, x, x],
- * ]
- * ```
- * where `x` is the index of space " "
- */
-export const charIndicesToLineCount = (charIndices: number[], col: number): number => {
-  const whiteSpace = atlasProps.chars.indexOf(' ')
-  const row = charIndices.length / col
-  let k = 0
-  while (k > 0) {
-    for (let i = 0; i < col; i++) {
-      const index = k * col + i
-      if (charIndices[index] !== whiteSpace) {
-        return row - k
-      }
-    }
-    k++
-  }
-  return row - k
-}
-
-
 export const combineInt8 = (a: number, b: number, c: number) => {
   // return (a << 16) + (b << 8) + c
   return a * 65536 + b * 256 + c

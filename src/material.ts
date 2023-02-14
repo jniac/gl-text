@@ -8,12 +8,17 @@ export const material = new MeshBasicMaterial({
   transparent: true,
   map: atlasTexture,
   side: DoubleSide,
+  polygonOffset: true,
+  polygonOffsetFactor: -10,
 })
+
+Object.assign(window, { material })
 
 export const uniforms = {
   uBillboard: { value: 1 },
+  uCharPerUnit: { value: 8 },
   uCameraMatrix: { value: new Matrix4() },
-  uCharSize: { value: new Vector4(64, 120, 64 / 120, 0) },
+  uCharSize: { value: new Vector4(64, 120, 64 / 120, 120 / 64) },
   uColRow: { value: new Vector2() },
 }
 
@@ -118,9 +123,11 @@ material.onBeforeCompile = shader => {
         float tx = charIndex - lineLength * 0.5;
         // float ty = (uColRow.y - 1.0 - lineIndex) - uColRow.y * 0.5 - (uColRow.y - lines.z) * 0.5;
         float ty = lines.z * 0.5 - 1.0 - lineIndex;
-        transformed.x = (transformed.x + tx * 0.9) * charAspect;
+        transformed.x = (transformed.x + tx) * charAspect;
         transformed.y = (transformed.y + ty);
         transformed.z = 0.0;
+
+        transformed.xy *= uCharSize.w / uCharPerUnit;
 
         if (uBillboard > 0.0) {
           mat3 m = mat3(uCameraMatrix);

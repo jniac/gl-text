@@ -3,7 +3,7 @@ import { atlasData } from './atlas/data'
 import { atlasProps } from './atlas/props'
 import { MAX_CHARS_PER_LINE, MAX_LINES } from './constants'
 import { material, uniforms } from './material'
-import { charIndicesToLineCount, charIndicesToLineLengths, combineInt6, combineInt8, createCharGeometry, solvePositionDeclaration, textToCharIndices } from './utils'
+import { combineInt6, combineInt8, createCharGeometry, solvePositionDeclaration, textToCharIndices } from './utils'
 
 const _color = new Color()
 const _matrix = new Matrix4()
@@ -20,6 +20,7 @@ export const defaultTextParams = {
   colorOpacity: 1,
   background: <ColorRepresentation> undefined!,
   backgroundOpacity: 0,
+  /** The size of the text. If not defined, it defaults to glText.props.defaultSize (which can be defined in the constructor). */
   size: 1,
 }
 
@@ -46,6 +47,7 @@ export class GlText extends Group {
   props: {
     col: number
     row: number
+    defaultSize: number
   }
 
   mesh: InstancedMesh
@@ -64,6 +66,8 @@ export class GlText extends Group {
     row = 2,
     billboard = true,
     charPerUnit = 8,
+    defaultSize = 1,
+    polygonOffsetFactor = -10,
   } = {}) {
     super()
 
@@ -75,8 +79,10 @@ export class GlText extends Group {
     this.add(mesh)
     mesh.onBeforeRender = (renderer, scene, camera) => {
       uniforms.uBillboard.value = billboard ? 1 : 0
+      uniforms.uCharPerUnit.value = charPerUnit
       uniforms.uCameraMatrix.value.copy(camera.matrixWorld)
       uniforms.uColRow.value.set(col, row)
+      material.polygonOffsetFactor = polygonOffsetFactor
     }
 
     const charsArray = new Float32Array(maxCount * 16)
@@ -95,7 +101,7 @@ export class GlText extends Group {
     const backgroundAttribute = new InstancedBufferAttribute(backgroundArray, 4)
     geometry.setAttribute('backgroundColor', backgroundAttribute)
 
-    this.props = { col, row }
+    this.props = { col, row, defaultSize }
     this.mesh = mesh
     this.charsArray = charsArray
     this.charsAttribute = charsAttribute
@@ -114,7 +120,7 @@ export class GlText extends Group {
       colorOpacity = defaultTextParams.colorOpacity,
       background,
       backgroundOpacity = option.background ? 1 : 0,
-      size = defaultTextParams.size,
+      size = this.props.defaultSize,
     } = option
 
     this.mesh.getMatrixAt(index, _matrix)

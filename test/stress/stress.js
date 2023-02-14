@@ -34,6 +34,7 @@ for (let i = 0, max = positionAttr1.count; i < max; i++) {
   glText.setTextAt(i, `v: ${i}`, {
     position: _vertex,
     color: 'red',
+    size: 4,
   })
 }
 
@@ -45,7 +46,7 @@ for (let i = 0, max = positionAttr2.count; i < max; i++) {
   glText.setTextAt(count1 + i, `outer torus knot\nvertex[:${i}:]`, {
     position: _vertex,
     color: 'blue',
-    size: .5,
+    size: 2.5,
   })
 }
 
@@ -58,7 +59,7 @@ for (let i = 0, max = positionAttr3.count; i < max; i++) {
     position: _vertex,
     color: 'blue',
     background: '#fc0',
-    size: .05,
+    size: .2,
   })
 }
 

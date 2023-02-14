@@ -1,23 +1,33 @@
 {
   "name": "@jniac/gl-text",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "`gl-text` is for rendering an insane number (> 100K) of small texts (max 48 chars) with ThreeJS.",
+  "module": "./lib/index.js",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "node": "./lib/node/index.js"
+    }
+  },
+  "types": "./lib/index.d.ts",
   "scripts": {
     "dev": "node scripts/watch.mjs",
     "build": "node scripts/build.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["text", "threejs", "webgl", "instance", "performance", "debug"],
   "author": "jniac",
   "license": "ISC",
+  "dependencies": {
+    "@types/three": "^0.149.0",
+    "three": "^0.149.0"
+  },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.33.7",
-    "@types/three": "^0.149.0",
     "chokidar": "^3.5.3",
     "esbuild": "0.16.7",
     "fs-extra": "^11.1.0",
-    "three": "^0.149.0",
     "typescript": "^4.9.4"
   }
 }

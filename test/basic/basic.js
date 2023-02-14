@@ -1,4 +1,4 @@
-import { Color, IcosahedronGeometry, Mesh, MeshBasicMaterial } from 'three'
+import { Color, IcosahedronGeometry, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 import { GlText } from '@jniac/gl-text'
 import { scene } from '../shared/stage.js'
 import { createSphere } from '../shared/utils.js'
@@ -13,14 +13,22 @@ const setPoint = (x = 0, y = 0, z = 0) => {
   scene.add(point)
 }
 
+const plane = new Mesh(new PlaneGeometry(4, 2), new MeshBasicMaterial({
+  color: 'red',
+  // wireframe: true,
+}))
+scene.add(plane)
+
 const glText = new GlText({
   billboard: false,
+  defaultSize: 4,
 })
 scene.add(glText)
 
 setPoint(0, 0, 0)
-glText.setTextAt(0, 'hello world', {
+glText.setTextAt(0, '12345678', {
   color: 'red',
+  background: 'white',
 })
 
 setPoint(0, 2, 0)
@@ -43,7 +51,7 @@ glText.setTextAt(3, `+-_=*/\\|\n[](){}<>` , {
   position: [0, -4, 0],
   color: 'blue',
   background: 'yellow',
-  size: .5,
+  size: 2,
 })
 
 document.body.append(GlText.getAtlasImg())

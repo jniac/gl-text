@@ -13,6 +13,12 @@ import {
 
 const PROJECT_ID = 'gl-text'
 
+const copyPackageJson = async () => {
+  const data = await fs.readFile('package.json', { encoding: 'utf-8' })
+  const transformed = data.replace(/\.\/lib\//g, './')
+  await fs.writeFile('lib/package.json', transformed)
+}
+
 export const build = async () => {
   // Compute tmp dir
   const tmp = os.tmpdir()
@@ -94,6 +100,9 @@ export const build = async () => {
 
     await fs.move('dist/gl-text.d.ts', 'lib/index.d.ts')
     await fs.rm('dist', { recursive: true })
+
+    // Copy the package.json directly into the lib folder
+    await copyPackageJson()
     
   } catch (error) {
 

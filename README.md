@@ -1,6 +1,6 @@
 # gl-text
 
-gl-text is for rendering an insane number (> 100K) of small texts (max 48 chars) with ThreeJS, for
+`gl-text` is for rendering an insane number (> 100K) of small texts (max 48 chars) with ThreeJS, for
 debugging purpose essentially (eg: Mesh inspection).
 
 <a href="https://jniac.github.io/gl-text/test/stress/">
