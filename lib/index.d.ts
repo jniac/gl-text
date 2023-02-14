@@ -39,7 +39,7 @@ export declare class GlText extends Group {
     colorAttribute: InstancedBufferAttribute;
     backgroundArray: Float32Array;
     backgroundAttribute: InstancedBufferAttribute;
-    constructor({ maxCount, col, row, billboard, charPerUnit, defaultSize, polygonOffsetFactor, }?: {
+    constructor({ maxCount, col, row, billboard, charPerUnit, defaultSize, polygonOffsetFactor, polygonOffsetUnits, cameraZOffset, }?: {
         maxCount?: number | undefined;
         col?: number | undefined;
         row?: number | undefined;
@@ -47,6 +47,8 @@ export declare class GlText extends Group {
         charPerUnit?: number | undefined;
         defaultSize?: number | undefined;
         polygonOffsetFactor?: number | undefined;
+        polygonOffsetUnits?: number | undefined;
+        cameraZOffset?: number | undefined;
     });
     setTextAt(index: number, text: string, option?: TextParams): this;
 }
