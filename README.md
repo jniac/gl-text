@@ -7,6 +7,16 @@ debugging purpose essentially (eg: Mesh inspection).
   <img src="screenshots/jpg/test_stress-q60.jpg">
 </a>
 
+## Demo & Atlas
+
+Demos:
+- [basic](https://jniac.github.io/gl-text/test/basic/)
+- [stress](https://jniac.github.io/gl-text/test/stress/)
+- [offset](https://jniac.github.io/gl-text/test/offset/)
+
+The atlas is made via `canvas.toDataURL()` from that page:
+- [Atlas Generator](https://jniac.github.io/gl-text/atlas/)
+
 ## Features
 
 - Colors:

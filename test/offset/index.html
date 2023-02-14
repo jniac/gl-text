@@ -17,6 +17,19 @@
   <link rel="stylesheet" href="../shared/style.css">
 </head>
 <body>
+  <div class="click-through absolute-fill flex column" style="z-index: 1; justify-content: flex-end; padding: 32px;">
+    <h1 class="flex row center gutter-16" style="background-color: white; padding: 4px; align-self: flex-start;">
+      Offset
+    </h1>
+    <p>
+      Better Z fighting thanks to the cameraZOffset option.
+    </p>
+    <div class="flex row gutter-16">
+      <label for="cameraZOffset">cameraZOffset</label>
+      <input type="range" name="cameraZOffset" id="" value=".5" min="-1" max="3" step=".1">
+      <span id="cameraZOffset-value">0.5</span>
+    </div>
+  </div>
   <script src="offset.js" type="module"></script>
 </body>
 </html>

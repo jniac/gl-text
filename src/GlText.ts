@@ -47,7 +47,12 @@ export class GlText extends Group {
   props: {
     col: number
     row: number
+    billboard: boolean
+    charPerUnit: number
     defaultSize: number
+    polygonOffsetFactor: number
+    polygonOffsetUnits: number
+    cameraZOffset: number    
   }
 
   mesh: InstancedMesh
@@ -76,17 +81,36 @@ export class GlText extends Group {
     col = Math.min(col, MAX_CHARS_PER_LINE)
     row = Math.min(row, MAX_LINES)
 
+    this.props = {
+      col,
+      row,
+      billboard,
+      charPerUnit,
+      defaultSize,
+      polygonOffsetFactor,
+      polygonOffsetUnits,
+      cameraZOffset,      
+    }
+
     const geometry = createCharGeometry(col * row)
     const mesh = new InstancedMesh(geometry, material, maxCount)
     this.add(mesh)
     
     // uniforms update:
     mesh.onBeforeRender = (renderer, scene, camera) => {
+      const {
+        col,
+        row,
+        billboard,
+        charPerUnit,
+        polygonOffsetFactor,
+        polygonOffsetUnits,
+        cameraZOffset,      
+      } = this.props
+      uniforms.uCameraMatrix.value.copy(camera.matrixWorld)
       uniforms.uBillboard.value = billboard ? 1 : 0
       uniforms.uCharPerUnit.value = charPerUnit
-      uniforms.uCharPerUnit.value = charPerUnit
       uniforms.uCameraZOffset.value = cameraZOffset
-      uniforms.uCameraMatrix.value.copy(camera.matrixWorld)
       uniforms.uColRow.value.set(col, row)
       material.polygonOffsetFactor = polygonOffsetFactor
       material.polygonOffsetUnits = polygonOffsetUnits
@@ -108,7 +132,6 @@ export class GlText extends Group {
     const backgroundAttribute = new InstancedBufferAttribute(backgroundArray, 4)
     geometry.setAttribute('backgroundColor', backgroundAttribute)
 
-    this.props = { col, row, defaultSize }
     this.mesh = mesh
     this.charsArray = charsArray
     this.charsAttribute = charsAttribute

@@ -46,3 +46,9 @@ for (let i = 0, max = positionAttr.count; i < max; i++) {
     size: .35,
   })
 }
+
+document.querySelector('input').oninput = event => {
+  const cameraZOffset = Number.parseFloat(event.currentTarget.value)
+  glText.props.cameraZOffset = cameraZOffset
+  document.querySelector('#cameraZOffset-value').innerHTML = cameraZOffset.toFixed(1)
+}
