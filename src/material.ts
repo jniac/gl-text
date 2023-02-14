@@ -30,6 +30,7 @@ material.onBeforeCompile = shader => {
     .varying({
       vTextColor: 'vec4',
       vBackgroundColor: 'vec4',
+      // NOTE: Why vec3? Only 'xy' are used.
       vUvw: 'vec3',
     })
     .vertex.replace('#include <morphtarget_pars_vertex>', '')
@@ -37,8 +38,6 @@ material.onBeforeCompile = shader => {
       const float ATLAS_CHARS_PER_LINE = 64.0;
       const float INV_ATLAS_CHARS_PER_LINE = 1.0 / 64.0;
       const float INT8_PER_FLOAT32 = 3.0;
-      const float THRESHOLD_1_3 = 0.33;
-      const float THRESHOLD_2_3 = 0.66;
 
       attribute mat4 chars;
       attribute vec3 lines;

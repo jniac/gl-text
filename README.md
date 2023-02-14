@@ -60,6 +60,26 @@ glText.setTextAt(0, 'foo', {
 })
 ```
 
+## How does it works?
+
+GlText uses internally [InstancedMesh](https://threejs.org/docs/?q=mesh#api/en/objects/InstancedMesh) 
+& [MeshBasicMaterial](https://threejs.org/docs/?q=mesh#api/en/materials/MeshBasicMaterial).
+The text instances are drawn in one draw call thanks to the modified material. 
+The text data is tramsitted to the shader via attributes. [There are actually four
+attributes](src/material.ts#L43-L46) : 
+```glsl
+attribute mat4 chars;
+attribute vec3 lines;
+attribute vec4 textColor;
+attribute vec4 backgroundColor;
+```
+Chars are encoded into int8 then packed 3 by 3 into float32, then sent through
+the chars attribute as mat4.
+
+In the vertex shader the data is decoded and custom uv (vUvw) are computed for 
+the fragment shader.
+
+
 ## Info
 
 The output (js, .d.ts + map) is generated (but not commited) in the lib folder.
