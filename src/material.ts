@@ -12,11 +12,10 @@ export const material = new MeshBasicMaterial({
   polygonOffsetFactor: -10,
 })
 
-Object.assign(window, { material })
-
 export const uniforms = {
   uBillboard: { value: 1 },
   uCharPerUnit: { value: 8 },
+  uCameraZOffset: { value: 0 },
   uCameraMatrix: { value: new Matrix4() },
   uCharSize: { value: new Vector4(64, 120, 64 / 120, 120 / 64) },
   uColRow: { value: new Vector2() },
@@ -112,7 +111,7 @@ material.onBeforeCompile = shader => {
       vUvw.y = uvScaleY(position.y, offset.y);
       vUvw.z = position.z;
     `)
-    .vertex.before('#include <project_vertex>', /* glsl */`
+    .vertex.replace('#include <project_vertex>', /* glsl */`
       float charAspect = uCharSize.z;
       float slotIndex = position.z;
       float lineIndex = floor(slotIndex / uColRow.x);
@@ -136,6 +135,20 @@ material.onBeforeCompile = shader => {
       } else {
         transformed = vec3(0.0);
       }
+
+      // https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderChunk/project_vertex.glsl.js
+      vec4 mvPosition = vec4( transformed, 1.0 );
+      #ifdef USE_INSTANCING
+        mvPosition = instanceMatrix * mvPosition;
+      #endif
+      if (uBillboard > 0.0 && uCameraZOffset != 0.0) {
+        vec3 toCamera = uCameraMatrix[3].xyz - mvPosition.xyz;
+        float toCameraDist = length(toCamera);
+        toCamera /= toCameraDist;
+        mvPosition.xyz += toCamera * min(uCameraZOffset, toCameraDist);
+      }
+      mvPosition = modelViewMatrix * mvPosition;
+      gl_Position = projectionMatrix * mvPosition;
     `)
     .fragment.replace('#include <map_fragment>', /* glsl */ `
       float alpha = texture2D(map, vUvw.xy).r;

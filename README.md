@@ -20,6 +20,12 @@ debugging purpose essentially (eg: Mesh inspection).
   - By default the text instances are facing the camera
   - But it can be prevented: `new GlText({ billboard: false })`
 
+- Z fighting
+  - By default a tiny "polygon offset" is enabled, and can be adjusted: 
+    - `new GlText({ polygonOffsetFactor: -10, polygonOffsetUnits: -10 })`
+  - Even better: a `cameraZOffset` option allows to shift the text directly to the camera!
+    - `new GlText({ cameraZOffset: .5 })`
+
 - Supports mipmaps
   - Because every chars is drawn through separated triangles (2 triangles actually)
     mimaps works without any troubles (it was not the case with previous technic

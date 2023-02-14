@@ -67,7 +67,9 @@ export class GlText extends Group {
     billboard = true,
     charPerUnit = 8,
     defaultSize = 1,
-    polygonOffsetFactor = -10,
+    polygonOffsetFactor = -1,
+    polygonOffsetUnits = -10,
+    cameraZOffset = 0,
   } = {}) {
     super()
 
@@ -77,12 +79,17 @@ export class GlText extends Group {
     const geometry = createCharGeometry(col * row)
     const mesh = new InstancedMesh(geometry, material, maxCount)
     this.add(mesh)
+    
+    // uniforms update:
     mesh.onBeforeRender = (renderer, scene, camera) => {
       uniforms.uBillboard.value = billboard ? 1 : 0
       uniforms.uCharPerUnit.value = charPerUnit
+      uniforms.uCharPerUnit.value = charPerUnit
+      uniforms.uCameraZOffset.value = cameraZOffset
       uniforms.uCameraMatrix.value.copy(camera.matrixWorld)
       uniforms.uColRow.value.set(col, row)
       material.polygonOffsetFactor = polygonOffsetFactor
+      material.polygonOffsetUnits = polygonOffsetUnits
     }
 
     const charsArray = new Float32Array(maxCount * 16)
