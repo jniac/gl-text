@@ -81,6 +81,7 @@ export declare const defaultTextParams: {
 export declare class GlText extends Group {
     static getAtlasImg(): HTMLImageElement;
     static getAtlasChars(): string;
+    static get ShaderForge(): ShaderForgeType;
     props: {
         col: number;
         row: number;
