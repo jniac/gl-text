@@ -42,6 +42,7 @@ The atlas is made via `canvas.toDataURL()` from that page:
     using a single plane for multiple chars).
 
 ## Usage
+
 ```ts
 const glText = new GlText({
   maxCount: 100_000, // default is 2000
@@ -59,6 +60,8 @@ glText.setTextAt(0, 'foo', {
   size: 2,
 })
 ```
+
+For a complete understanding of the tool, [see the declaration file (index.d.ts)](lib/index.d.ts)
 
 ## How does it works?
 

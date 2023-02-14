@@ -14,13 +14,35 @@ const _vector = new Vector3()
  * The default parameter for a text to be displayed.
  */
 export const defaultTextParams = {
-  /** The position where the text should be displayed. */
+  /** 
+   * The position where the text should be displayed.
+   * 
+   * NOTE: If the `position` does not provide enough controls, use the `matrix` 
+   * option.
+   */
   position: <Partial<Vector3> | number[]> { x: 0, y: 0, z: 0 },
+  /** 
+   * If the `position` option is not enough, the `matrix` option allow to define 
+   * the full transform state of the instance.
+   * 
+   * NOTE: When the matrix is used, you probably want to disable the billboard 
+   * mode from the constructor (`new GlText({ billboard: false })`)
+   */
+  matrix: <Matrix4> undefined!,
+  /**
+   * The color of the text. Defaults to white.
+   */
   color: <ColorRepresentation> 'white',
   colorOpacity: 1,
+  /**
+   * The color of the background. For better readability?
+   */
   background: <ColorRepresentation> undefined!,
   backgroundOpacity: 0,
-  /** The size of the text. If not defined, it defaults to glText.props.defaultSize (which can be defined in the constructor). */
+  /** 
+   * The size of the text. If not defined, it defaults to glText.props.defaultSize 
+   * (which can be defined in the constructor).
+   */
   size: 1,
 }
 
@@ -145,7 +167,8 @@ export class GlText extends Group {
 
   setTextAt(index: number, text: string, option: TextParams = {}): this {
     const {
-      position = defaultTextParams.position,
+      position,
+      matrix,
       color = defaultTextParams.color,
       colorOpacity = defaultTextParams.colorOpacity,
       background,
@@ -154,7 +177,12 @@ export class GlText extends Group {
     } = option
 
     this.mesh.getMatrixAt(index, _matrix)
-    _matrix.setPosition(solvePositionDeclaration(position))
+    if (matrix) {
+      _matrix.copy(matrix)
+    }
+    if (position) {
+      _matrix.setPosition(solvePositionDeclaration(position))
+    }
     _matrix.scale(_vector.setScalar(size))
     this.mesh.setMatrixAt(index, _matrix)
 
