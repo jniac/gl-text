@@ -13,7 +13,9 @@ const setPoint = (x = 0, y = 0, z = 0) => {
   scene.add(point)
 }
 
-const glText = new GlText()
+const glText = new GlText({
+  billboard: false,
+})
 scene.add(glText)
 
 setPoint(0, 0, 0)

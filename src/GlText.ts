@@ -62,6 +62,7 @@ export class GlText extends Group {
     maxCount = 2000,
     col = 12,
     row = 2,
+    billboard = true,
     charPerUnit = 8,
   } = {}) {
     super()
@@ -73,9 +74,9 @@ export class GlText extends Group {
     const mesh = new InstancedMesh(geometry, material, maxCount)
     this.add(mesh)
     mesh.onBeforeRender = (renderer, scene, camera) => {
+      uniforms.uBillboard.value = billboard ? 1 : 0
       uniforms.uCameraMatrix.value.copy(camera.matrixWorld)
       uniforms.uColRow.value.set(col, row)
-      uniforms.uTextSize.value.set(col, row, col / charPerUnit, row / charPerUnit / atlasProps.charAspect)
     }
 
     const charsArray = new Float32Array(maxCount * 16)

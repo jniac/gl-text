@@ -11,8 +11,8 @@ export const material = new MeshBasicMaterial({
 })
 
 export const uniforms = {
+  uBillboard: { value: 1 },
   uCameraMatrix: { value: new Matrix4() },
-  uTextSize: { value: new Vector4() },
   uCharSize: { value: new Vector4(64, 120, 64 / 120, 0) },
   uColRow: { value: new Vector2() },
 }
@@ -122,8 +122,10 @@ material.onBeforeCompile = shader => {
         transformed.y = (transformed.y + ty);
         transformed.z = 0.0;
 
-        mat3 m = mat3(uCameraMatrix);
-        transformed = m * transformed;
+        if (uBillboard > 0.0) {
+          mat3 m = mat3(uCameraMatrix);
+          transformed = m * transformed;
+        }
       } else {
         transformed = vec3(0.0);
       }
