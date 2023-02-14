@@ -2,8 +2,39 @@ import { ColorRepresentation } from 'three';
 import { Group } from 'three';
 import { InstancedBufferAttribute } from 'three';
 import { InstancedMesh } from 'three';
+import { Material } from 'three';
 import { Matrix4 } from 'three';
 import { Vector3 } from 'three';
+
+/** @public */
+export declare type ConstructorParams = Partial<typeof defaultConstructorParams>;
+
+/**
+ * @public
+ */
+export declare const defaultConstructorParams: {
+    /**
+     * The number of text that the object could display. Defaults to 2000.
+     */
+    count: number;
+    col: number;
+    row: number;
+    billboard: boolean;
+    charPerUnit: number;
+    defaultSize: number;
+    polygonOffsetFactor: number;
+    polygonOffsetUnits: number;
+    cameraZOffset: number;
+    /**
+     * By default GlText use an internal modified material derived from MeshBasicMaterial.
+     * But here, it can be redefined by other choice, as MeshPhysicalMaterial, for
+     * clearcoat and sheen effect!
+     *
+     * NOTE: The provided material will be transformed before compilation (onBeforeCompile
+     * hook), and should not... already be compiled!
+     */
+    material: Material;
+};
 
 /**
  * @public
@@ -67,23 +98,11 @@ export declare class GlText extends Group {
     colorAttribute: InstancedBufferAttribute;
     backgroundArray: Float32Array;
     backgroundAttribute: InstancedBufferAttribute;
-    constructor({ maxCount, col, row, billboard, charPerUnit, defaultSize, polygonOffsetFactor, polygonOffsetUnits, cameraZOffset, }?: {
-        maxCount?: number | undefined;
-        col?: number | undefined;
-        row?: number | undefined;
-        billboard?: boolean | undefined;
-        charPerUnit?: number | undefined;
-        defaultSize?: number | undefined;
-        polygonOffsetFactor?: number | undefined;
-        polygonOffsetUnits?: number | undefined;
-        cameraZOffset?: number | undefined;
-    });
+    constructor(contructorParams?: ConstructorParams);
     setTextAt(index: number, text: string, option?: TextParams): this;
 }
 
-/**
- * @public
- */
+/** @public */
 export declare type TextParams = Partial<typeof defaultTextParams>;
 
 export { }
