@@ -15,6 +15,7 @@ export declare const defaultTextParams: {
     colorOpacity: number;
     background: ColorRepresentation;
     backgroundOpacity: number;
+    /** The size of the text. If not defined, it defaults to glText.props.defaultSize (which can be defined in the constructor). */
     size: number;
 };
 
@@ -27,6 +28,7 @@ export declare class GlText extends Group {
     props: {
         col: number;
         row: number;
+        defaultSize: number;
     };
     mesh: InstancedMesh;
     charsArray: Float32Array;
@@ -37,12 +39,14 @@ export declare class GlText extends Group {
     colorAttribute: InstancedBufferAttribute;
     backgroundArray: Float32Array;
     backgroundAttribute: InstancedBufferAttribute;
-    constructor({ maxCount, col, row, billboard, charPerUnit, }?: {
+    constructor({ maxCount, col, row, billboard, charPerUnit, defaultSize, polygonOffsetFactor, }?: {
         maxCount?: number | undefined;
         col?: number | undefined;
         row?: number | undefined;
         billboard?: boolean | undefined;
         charPerUnit?: number | undefined;
+        defaultSize?: number | undefined;
+        polygonOffsetFactor?: number | undefined;
     });
     setTextAt(index: number, text: string, option?: TextParams): this;
 }
