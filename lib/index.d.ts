@@ -28,7 +28,12 @@ export declare class GlText extends Group {
     props: {
         col: number;
         row: number;
+        billboard: boolean;
+        charPerUnit: number;
         defaultSize: number;
+        polygonOffsetFactor: number;
+        polygonOffsetUnits: number;
+        cameraZOffset: number;
     };
     mesh: InstancedMesh;
     charsArray: Float32Array;
