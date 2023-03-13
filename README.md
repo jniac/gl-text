@@ -55,9 +55,9 @@ The atlas is made via `canvas.toDataURL()` from that page:
 ```ts
 const glText = new GlText({
   count: 100_000, // default is 2000
-  col = 16, // default is 12
-  row = 3, // default is 2
-  billboard = false, // default is true
+  col: 16, // default is 12
+  row: 3, // default is 2
+  billboard: false, // default is true
 })
 
 scene.add(glText)
