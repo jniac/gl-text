@@ -7,6 +7,9 @@ debugging purpose essentially (eg: Mesh inspection).
   <img src="screenshots/jpg/test_stress-q60.jpg">
 </a>
 
+## Font
+The font used by default for generating the atlas is [the excellent Fira Code](https://github.com/tonsky/FiraCode).
+
 ## Demo & Atlas
 
 Demos:
