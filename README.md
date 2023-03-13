@@ -4,11 +4,14 @@
 debugging purpose essentially (eg: Mesh inspection).
 
 <a href="https://jniac.github.io/gl-text/test/stress/">
-  <img src="screenshots/jpg/test_stress-q60.jpg">
+  <img src="https://raw.githubusercontent.com/jniac/gl-text/main/screenshots/jpg/test_stress-q60.jpg">
 </a>
 
 ## Font
 The font used by default for generating the atlas is [the excellent Fira Code](https://github.com/tonsky/FiraCode).
+
+## NPM
+[@jniac/gl-text](https://www.npmjs.com/package/@jniac/gl-text)
 
 ## Demo & Atlas
 
