@@ -24,10 +24,14 @@ export const transformMaterial = <T extends Material>(material: T): T => {
     map: atlasTexture,
   })
 
-  material.onBeforeCompile = shader => {
+  const onBeforeCompileBackup = material.onBeforeCompile
+
+  material.onBeforeCompile = (shader, renderer) => {
+    onBeforeCompileBackup?.(shader, renderer)
+  
     // console.log(shader.vertexShader)
     // console.log(shader.fragmentShader)
-  
+
     ShaderForge.with(shader)
       .uniforms(uniforms)
       .varying({

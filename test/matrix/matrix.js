@@ -1,4 +1,4 @@
-import { Color, TorusKnotGeometry, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, AmbientLight, DirectionalLight, Vector3, Matrix4, FogExp2, Group } from 'three'
+import { Color, TorusKnotGeometry, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, AmbientLight, DirectionalLight, Vector3, Matrix4, FogExp2, Group, DoubleSide } from 'three'
 import { GlText } from '@jniac/gl-text'
 import { onFrame, scene } from '../shared/stage.js'
 
@@ -31,13 +31,18 @@ onFrame(() => {
   group.rotateY(.001)
 })
 
+const material = new MeshPhysicalMaterial({
+  side: DoubleSide,
+  transparent: true,
+})
+
 const glText = new GlText({
   count: positionAttr.count,
   col: 24,
   row: 2,
   cameraZOffset: .5,
   billboard: false,
-  material: new MeshPhysicalMaterial(),
+  material,
 })
 wireMesh.add(glText)
 
